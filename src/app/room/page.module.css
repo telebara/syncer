@@ -1,0 +1,44 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #181818;
+  padding: 20px 32px;
+  border-radius: 0 0 24px 24px;
+  box-shadow: 0 2px 16px #0004;
+  margin-bottom: 32px;
+}
+
+.backBtn {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 500;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s;
+}
+.backBtn:hover {
+  color: #aaa;
+}
+
+.roomCode {
+  color: #fff;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  background: #222;
+  padding: 8px 24px;
+  border-radius: 16px;
+  box-shadow: 0 1px 8px #0003;
+}
+
+.avatarCircle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #222;
+  box-shadow: 0 0 0 2px #111;
+} 
