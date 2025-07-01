@@ -19,7 +19,7 @@ const RoomPage = ({ params }: { params: { code: string } }) => {
           ← Назад
         </button>
         <div className={styles.roomCode}>{roomCode}</div>
-        <Avatar username={username} size={48} />
+        <Avatar size={48} />
       </Navbar>
       {/* Room content will go here */}
     </div>

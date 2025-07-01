@@ -1,23 +1,23 @@
 import React, { useMemo } from "react";
-import { createAvatar } from "@dicebear/core";
-import { identicon } from "@dicebear/collection";
+import { useUser } from "../context/UserContext";
 
 interface AvatarProps {
-  username: string;
+  username?: string;
+  avatarDataUri?: string;
   size?: number;
 }
 
-const Avatar = ({ username, size = 120 }: AvatarProps) => {
-  const avatarDataUri = useMemo(() => {
-    return createAvatar(identicon, { seed: username }).toDataUri();
-  }, [username]);
+const Avatar = ({ username, avatarDataUri, size = 120 }: AvatarProps) => {
+  const user = useUser();
+  const finalUsername = username ?? user.username;
+  const finalAvatar = avatarDataUri ?? user.avatarDataUri;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       <div style={{ width: size, height: size, borderRadius: "50%", overflow: "hidden", background: "#222", boxShadow: "0 0 0 4px #111" }}>
-        <img src={avatarDataUri} alt="avatar" width={size} height={size} style={{ width: "100%", height: "100%" }} />
+        <img src={finalAvatar} alt="avatar" width={size} height={size} style={{ width: "100%", height: "100%" }} />
       </div>
-      <div style={{ color: "#fff", fontWeight: 600, fontSize: 22, marginTop: 8 }}>{username}</div>
+      <div style={{ color: "#fff", fontWeight: 600, fontSize: 22, marginTop: 8 }}>{finalUsername}</div>
     </div>
   );
 };

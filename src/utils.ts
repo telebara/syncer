@@ -36,11 +36,14 @@ export const formatRoomCode = (code: string) => {
   return up.length > 4 ? `${up.slice(0, 4)}-${up.slice(4, 8)}` : up;
 };
 
-export const getMockVideos = (): {
+
+export type UserVideoDTO = {
   id: number;
   title: string;
   thumb: string;
-}[] => {
+};
+
+export const getMockVideos = (): UserVideoDTO[] => {
   return [
     { id: 1, title: "Торрент 1", thumb: "/file.svg" },
     { id: 2, title: "Торрент 2", thumb: "/file.svg" },
