@@ -2,27 +2,28 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import styles from "./page.module.css";
-import { getRandomUsername, getDiceBearAvatarSvg, formatRoomCode } from "../../../utils";
+import styles from "../page.module.css";
+import { getRandomUsername, formatRoomCode } from "../../../utils";
+import Avatar from "../../components/Avatar";
+import Navbar from "../../components/Navbar";
 
-export default function RoomPage({ params }: { params: { code: string } }) {
+const RoomPage = ({ params }: { params: { code: string } }) => {
   const router = useRouter();
   const [username] = useState(() => getRandomUsername());
-  const avatarUrl = getDiceBearAvatarSvg(username);
   const roomCode = formatRoomCode(params.code);
 
   return (
     <div>
-      <nav className={styles.navbar}>
+      <Navbar>
         <button className={styles.backBtn} onClick={() => router.back()}>
           ← Назад
         </button>
         <div className={styles.roomCode}>{roomCode}</div>
-        <div className={styles.avatarCircle}>
-          <img src={avatarUrl} alt="avatar" width={48} height={48} style={{ width: "100%", height: "100%" }} />
-        </div>
-      </nav>
+        <Avatar username={username} size={48} />
+      </Navbar>
       {/* Room content will go here */}
     </div>
   );
-} 
+};
+
+export default RoomPage;
