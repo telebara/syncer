@@ -1,15 +1,13 @@
 "use client"
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import styles from "../page.module.css";
-import { getRandomUsername, formatRoomCode } from "../../../utils";
+import { formatRoomCode } from "../../../utils";
 import Avatar from "../../components/Avatar";
 import Navbar from "../../components/Navbar";
 
 const RoomPage = ({ params }: { params: { code: string } }) => {
   const router = useRouter();
-  const [username] = useState(() => getRandomUsername());
   const roomCode = formatRoomCode(params.code);
 
   return (

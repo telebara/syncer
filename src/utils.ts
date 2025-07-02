@@ -97,7 +97,7 @@ export const getMockVideos = (): UserVideoDTO[] => {
       id: 5,
       title: "Ахуеть какое длинное название этого торрент файла аоаооаоао",
       thumb: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmetarankings.ru%2Fimages%2Fuploads%2F2024%2F01%2Fistrebitel-cover-art.jpg&f=1&nofb=1&ipt=35ed359383d7a820e9eddf403cafef7843c6f955e1f00f7480213ca9d141650c",
-      description: "Мультфильм для детей и взрослых.",
+      description: "МультфийвлдцйвлщтйцвтшйцМультфии взрослых.",
       rating: 8.0,
       ratingCount: 99,
       tags: ["К просмотру", "В процессе"],

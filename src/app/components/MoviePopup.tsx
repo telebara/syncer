@@ -1,4 +1,4 @@
-import { UserVideoDTO } from "../../utils";
+import { generateRoomCode, UserVideoDTO } from "../../utils";
 
 const MoviePopup = ({
   video,
@@ -26,12 +26,15 @@ const MoviePopup = ({
         background: "#222",
         borderRadius: 18,
         padding: 32,
-        minWidth: 320,
-        maxWidth: 420,
-        width: "90vw",
+        minWidth: 340,
+        maxWidth: 700,
+        width: "95vw",
         color: "#fff",
         position: "relative",
         boxShadow: "0 8px 32px #000a",
+        display: "flex",
+        flexDirection: "column",
+        gap: 24,
       }}
     >
       <button
@@ -50,60 +53,113 @@ const MoviePopup = ({
       >
         ×
       </button>
-      <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 16 }}>
-        {video.title}
-      </h2>
-      <img
-        src={video.thumb}
-        alt={video.title}
-        style={{ width: "100%", borderRadius: 12, marginBottom: 16 }}
-      />
-      <div style={{ color: "#bbb", fontSize: 15, marginBottom: 16 }}>
-        {video.description}
-      </div>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 8,
-          marginBottom: 16,
-        }}
-      >
-        <span
+
+      <div style={{ display: "flex", flexDirection: "row", gap: 32 }}>
+        {/* Левая часть: картинка, название, рейтинг */}
+        <div
           style={{
-            background: "#222",
-            color: "#ffd700",
-            borderRadius: 8,
-            padding: "2px 8px",
-            fontWeight: 600,
-            fontSize: 15,
+            minWidth: 180,
+            maxWidth: 240,
+            flex: "0 0 220px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          ★ {video.rating}
-        </span>
-        <span style={{ color: "#888", fontSize: 13 }}>
-          ({video.ratingCount} оценок)
-        </span>
+          <img
+            src={video.thumb}
+            alt={video.title}
+            style={{
+              width: "100%",
+              maxWidth: 220,
+              height: "auto",
+              maxHeight: 320,
+              borderRadius: 12,
+              marginBottom: 18,
+              objectFit: "cover",
+              background: "#181818",
+            }}
+          />
+          <div
+            style={{
+              color: "#fff",
+              fontWeight: 700,
+              fontSize: 20,
+              marginBottom: 8,
+              textAlign: "center",
+            }}
+          >
+            {video.title}
+          </div>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              marginBottom: 4,
+              justifyContent: "center",
+            }}
+          >
+            <span
+              style={{
+                background: "#222",
+                color: "#ffd700",
+                borderRadius: 8,
+                padding: "2px 8px",
+                fontWeight: 600,
+                fontSize: 16,
+              }}
+            >
+              ★ {video.rating}
+            </span>
+            <span style={{ color: "#888", fontSize: 14 }}>
+              ({video.ratingCount} оценок)
+            </span>
+          </div>
+        </div>
+
+        {/* Правая часть: кнопка */}
+        <div
+          style={{
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            marginTop: 24,
+          }}
+        >
+          <a
+            style={{
+              padding: "16px 36px",
+              borderRadius: 16,
+              background: "linear-gradient(90deg, #a78bfa 60%, #6366f1 100%)",
+              color: "#fff",
+              fontWeight: 700,
+              fontSize: 20,
+              textAlign: "center",
+              border: "none",
+              cursor: "pointer",
+              boxShadow: "0 2px 8px #0002",
+              transition: "background 0.2s, color 0.2s",
+              minWidth: 220,
+            }}
+            href={`/room/${generateRoomCode()}`}
+          >
+            Создать комнату
+          </a>
+        </div>
       </div>
-      <button
+
+      {/* <div
         style={{
-          marginTop: 12,
-          padding: "12px 0",
-          borderRadius: 16,
-          background: "linear-gradient(90deg, #a78bfa 60%, #6366f1 100%)",
-          color: "#fff",
-          fontWeight: 700,
-          fontSize: 18,
-          textAlign: "center",
-          border: "none",
-          cursor: "pointer",
-          width: "100%",
-          boxShadow: "0 2px 8px #0002",
-          transition: "background 0.2s, color 0.2s",
+          color: "#bbb",
+          fontSize: 16,
+          margin: "0 0 8px 0",
+          textAlign: "left",
         }}
       >
-        Создать комнату
-      </button>
+        {video.description}
+      </div> */}
     </div>
   </div>
 );
