@@ -52,7 +52,7 @@ export type UserVideoDTO = {
   description: string;
   rating: number;
   ratingCount: number;
-  tags: TagType[];
+  tag: TagType;
 };
 
 export const getMockVideos = (): UserVideoDTO[] => {
@@ -64,7 +64,7 @@ export const getMockVideos = (): UserVideoDTO[] => {
       description: "Захватывающий приключенческий фильм.",
       rating: 8.5,
       ratingCount: 123,
-      tags: ["К просмотру"],
+      tag: "К просмотру",
     },
     {
       id: 2,
@@ -73,7 +73,7 @@ export const getMockVideos = (): UserVideoDTO[] => {
       description: "Драма о жизни и выборе.",
       rating: 7.2,
       ratingCount: 87,
-      tags: ["Просмотрено"],
+      tag: "Просмотрено",
     },
     {
       id: 3,
@@ -82,7 +82,7 @@ export const getMockVideos = (): UserVideoDTO[] => {
       description: "Комедия для всей семьи.",
       rating: 6.9,
       ratingCount: 45,
-      tags: ["В процессе"],
+      tag: "В процессе",
     },
     {
       id: 4,
@@ -91,7 +91,7 @@ export const getMockVideos = (): UserVideoDTO[] => {
       description: "Фантастика с элементами триллера.",
       rating: 9.1,
       ratingCount: 201,
-      tags: ["Отложено"],
+      tag: "Отложено",
     },
     {
       id: 5,
@@ -100,7 +100,7 @@ export const getMockVideos = (): UserVideoDTO[] => {
       description: "МультфийвлдцйвлщтйцвтшйцМультфии взрослых.",
       rating: 8.0,
       ratingCount: 99,
-      tags: ["К просмотру", "В процессе"],
+      tag: "К просмотру",
     },
   ];
 };

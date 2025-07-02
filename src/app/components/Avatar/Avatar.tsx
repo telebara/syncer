@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { useUser } from "../context/UserContext";
+import { useUser } from "../../context/UserContext";
 
 interface AvatarProps {
   username?: string;

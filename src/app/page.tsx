@@ -3,8 +3,8 @@
 import styles from "./page.module.css";
 import { useState } from "react";
 import { getMockVideos, UserVideoDTO } from "../utils";
-import Avatar from "./components/Avatar";
-import Library from "./components/Library";
+import Avatar from "./components/Avatar/Avatar";
+import Library from "./components/Library/Library";
 import { User } from "firebase/auth";
 import { useFirebaseAuth } from "./context/FirebaseAuthContext";
 

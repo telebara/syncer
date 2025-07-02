@@ -3,8 +3,8 @@
 import { useRouter } from "next/navigation";
 import styles from "../page.module.css";
 import { formatRoomCode } from "../../../utils";
-import Avatar from "../../components/Avatar";
-import Navbar from "../../components/Navbar";
+import Avatar from "../../components/Avatar/Avatar";
+import Navbar from "../../components/Navbar/Navbar";
 
 const RoomPage = ({ params }: { params: { code: string } }) => {
   const router = useRouter();

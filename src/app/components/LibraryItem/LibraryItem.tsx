@@ -1,5 +1,5 @@
 import React from "react";
-import { TAGS, truncateLongString, UserVideoDTO } from "../../utils";
+import { TAGS, truncateLongString, UserVideoDTO } from "../../../utils";
 
 interface LibraryItemProps {
   video: UserVideoDTO;
@@ -65,24 +65,21 @@ const LibraryItem = ({ video, onClick }: LibraryItemProps) => {
         {truncateLongString(video.title, maxTitle)}
       </div>
       <div style={{ display: "flex", gap: 6, marginBottom: 6 }}>
-        {video.tags.map((tag) => (
-          <span
-            key={tag}
-            style={{
-              background: TAGS[tag].bg,
-              color: TAGS[tag].color,
-              borderRadius: 8,
-              padding: "2px 10px",
-              fontSize: 13,
-              fontWeight: 500,
-              border: `1px solid ${TAGS[tag].color}`,
-              letterSpacing: 0.2,
-              minWidth: 0,
-            }}
-          >
-            {tag}
-          </span>
-        ))}
+      <span
+        style={{
+          background: TAGS[video.tag].bg,
+          color: TAGS[video.tag].color,
+          borderRadius: 8,
+          padding: "2px 10px",
+          fontSize: 13,
+          fontWeight: 500,
+          border: `1px solid ${TAGS[video.tag].color}`,
+          letterSpacing: 0.2,
+          minWidth: 0,
+        }}
+      >
+        {video.tag}
+      </span>
       </div>
       <div
         style={{
