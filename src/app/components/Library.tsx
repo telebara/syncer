@@ -1,15 +1,10 @@
 import React from "react";
 import LibraryItem from "./LibraryItem";
-
-interface Video {
-  id: number;
-  title: string;
-  thumb: string;
-}
+import { UserVideoDTO } from "../../utils";
 
 interface LibraryProps {
   loggedIn: boolean;
-  videos: Video[];
+  videos: UserVideoDTO[];
 }
 
 const Library = ({ loggedIn, videos }: LibraryProps) => {
@@ -17,7 +12,7 @@ const Library = ({ loggedIn, videos }: LibraryProps) => {
     <section>
       <h2 style={{ color: "#fff", marginTop: 32, fontSize: 24, fontWeight: 700 }}>Библиотека</h2>
       {loggedIn ? (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 24, width: "100%", maxWidth: 600, margin: "32px auto" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 24, width: "100%", maxWidth: 900, margin: "32px auto" }}>
           {videos.map((video) => (
             <LibraryItem key={video.id} video={video} />
           ))}

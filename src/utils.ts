@@ -36,32 +36,72 @@ export const formatRoomCode = (code: string) => {
   return up.length > 4 ? `${up.slice(0, 4)}-${up.slice(4, 8)}` : up;
 };
 
+export const TAGS = {
+  'К просмотру': { color: '#3b82f6', bg: '#1e293b' },
+  'Просмотрено': { color: '#22c55e', bg: '#14532d' },
+  'В процессе': { color: '#f59e42', bg: '#78350f' },
+  'Отложено': { color: '#f43f5e', bg: '#881337' },
+};
+
+export type TagType = keyof typeof TAGS;
 
 export type UserVideoDTO = {
   id: number;
   title: string;
   thumb: string;
+  description: string;
+  rating: number;
+  ratingCount: number;
+  tags: TagType[];
 };
 
 export const getMockVideos = (): UserVideoDTO[] => {
   return [
-    { id: 1, title: "Торрент 1", thumb: "/file.svg" },
-    { id: 2, title: "Торрент 2", thumb: "/file.svg" },
-    { id: 3, title: "Торрент 3", thumb: "/file.svg" },
-    { id: 4, title: "Торрент 4", thumb: "/file.svg" },
-    { id: 5, title: "Торрент 5", thumb: "/file.svg" },
-    { id: 6, title: "Торрент 6", thumb: "/file.svg" },
-    { id: 7, title: "Торрент 7", thumb: "/file.svg" },
-    { id: 8, title: "Торрент 8", thumb: "/file.svg" },
-    { id: 9, title: "Торрент 9", thumb: "/file.svg" },
-    { id: 10, title: "Торрент 10", thumb: "/file.svg" },
-    { id: 11, title: "Торрент 11", thumb: "/file.svg" },
-    { id: 12, title: "Торрент 12", thumb: "/file.svg" },
-    { id: 13, title: "Торрент 13", thumb: "/file.svg" },
-    { id: 14, title: "Торрент 14", thumb: "/file.svg" },
-    { id: 15, title: "Торрент 15", thumb: "/file.svg" },
-    { id: 16, title: "Торрент 16", thumb: "/file.svg" },
-    { id: 17, title: "Торрент 17", thumb: "/file.svg" },
+    {
+      id: 1,
+      title: "Торрент 1",
+      thumb: "/file.svg",
+      description: "Захватывающий приключенческий фильм.",
+      rating: 8.5,
+      ratingCount: 123,
+      tags: ["К просмотру"],
+    },
+    {
+      id: 2,
+      title: "Торрент 2",
+      thumb: "/file.svg",
+      description: "Драма о жизни и выборе.",
+      rating: 7.2,
+      ratingCount: 87,
+      tags: ["Просмотрено"],
+    },
+    {
+      id: 3,
+      title: "Торрент 3",
+      thumb: "/file.svg",
+      description: "Комедия для всей семьи.",
+      rating: 6.9,
+      ratingCount: 45,
+      tags: ["В процессе"],
+    },
+    {
+      id: 4,
+      title: "Торрент 4",
+      thumb: "/file.svg",
+      description: "Фантастика с элементами триллера.",
+      rating: 9.1,
+      ratingCount: 201,
+      tags: ["Отложено"],
+    },
+    {
+      id: 5,
+      title: "Ахуеть какое длинное название этого торрент файла аоаооаоао",
+      thumb: "/file.svg",
+      description: "Мультфильм для детей и взрослых.",
+      rating: 8.0,
+      ratingCount: 99,
+      tags: ["К просмотру", "В процессе"],
+    },
   ];
 };
 
@@ -69,3 +109,7 @@ export const generateRoomCode = (): string => {
   const part = () => Math.random().toString(36).substring(2, 6).toUpperCase();
   return `${part()}-${part()}`;
 };
+
+export const truncateLongString = (str: string, max: number) => {
+  return str.length > max ? str.slice(0, max - 1) + "..." : str;
+}
