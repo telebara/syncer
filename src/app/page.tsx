@@ -52,12 +52,12 @@ const HomePage = () => {
         Выйти
       </button>
       <Library loggedIn={true} videos={mockVideos} />
-      <a
+      {/* <a
         href={`/room/${generateRoomCode()}`}
         className={styles.createRoomBtn}
       >
         Создать комнату
-      </a>
+      </a> */}
     </>
   );
 };

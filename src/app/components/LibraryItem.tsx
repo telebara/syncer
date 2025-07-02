@@ -3,13 +3,16 @@ import { TAGS, truncateLongString, UserVideoDTO } from "../../utils";
 
 interface LibraryItemProps {
   video: UserVideoDTO;
+  onClick?: () => void;
 }
 
-const LibraryItem = ({ video }: LibraryItemProps) => {
+const LibraryItem = ({ video, onClick }: LibraryItemProps) => {
   const maxTitle = 22;
   const maxDesc = 60;
   const showTitleTooltip = video.title.length > maxTitle;
   const showDescTooltip = video.description.length > maxDesc;
+
+  const [hover, setHover] = React.useState(false);
 
   return (
     <div
@@ -26,14 +29,20 @@ const LibraryItem = ({ video }: LibraryItemProps) => {
         width: "100%",
         gap: 12,
         position: "relative",
+        border: hover ? "2px solid #a78bfa" : "2px solid transparent",
+        cursor: "pointer",
+        transition: "border 0.18s",
       }}
+      onClick={onClick}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
     >
       <img
         src={video.thumb}
         alt={video.title}
         style={{
           width: "100%",
-          height: 160,
+          height: 360,
           objectFit: "cover",
           borderRadius: 14,
           marginBottom: 10,
