@@ -1,0 +1,70 @@
+x-postgres-creds: &postgres-creds
+  POSTGRES_USER: syncer_user
+  POSTGRES_PASSWORD: syncer_pass
+  POSTGRES_DB: syncer_db
+
+x-nginx-params: &nginx-params
+  volumes:
+    - ./nginx/dev.conf:/etc/nginx/nginx.conf:ro
+  depends_on:
+    - syncer-service
+
+x-app-params: &app-params
+  stdin_open: true
+  tty: true
+  build:
+    context: .
+    dockerfile: ./Dockerfile
+    target: dev
+  depends_on:
+    syncer-db:
+      condition: service_healthy
+  volumes:
+    - ./:/opt/app
+  env_file:
+    - vars/.env.dev
+
+services:
+  syncer-service:
+    <<: *app-params
+    container_name: syncer-service
+    command: python main.py
+    expose:
+      - "8080"
+    networks:
+      - syncer_network
+
+  syncer-proxy:
+    <<: *nginx-params
+    image: nginx:1.27.0
+    container_name: nginx
+    ports:
+      - "6969:80"
+    networks:
+      - syncer_network
+
+  syncer-db:
+    image: postgres:17.2-alpine
+    container_name: syncer-db
+    environment:
+      <<: *postgres-creds
+    volumes:
+      - ./.docker-data/postgres_data:/var/lib/postgresql/data
+    expose:
+      - "5432"
+    ports:
+      - "6666:5432"
+    networks:
+      - syncer_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U syncer_user -d syncer_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+
+networks:
+  syncer_network:
+    external: true
