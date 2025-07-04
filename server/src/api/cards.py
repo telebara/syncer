@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 
+from common.get_current_user_from_token import get_current_user_from_token
 from services.cards import (
     CreateCardService,
     GetUserCardsService,
@@ -7,6 +8,7 @@ from services.cards import (
     UpdateCardService,
     DeleteCardService,
 )
+from daos.user_dao import UserEntity
 from dtos.cards import (
     CreateCardRequestDTO,
     UpdateCardRequestDTO,
@@ -25,7 +27,7 @@ router = APIRouter(prefix='/cards', tags=['cards'])
 )
 async def create_card(
     data: CreateCardRequestDTO,
-    user_id: int,  # TODO: Получать из JWT токена
+    user: UserEntity = Depends(get_current_user_from_token),
     service: CreateCardService = Depends(CreateCardService.build),
 ) -> CardResponseDTO:
     try:
@@ -34,7 +36,7 @@ async def create_card(
             description=data.description,
             image_url=data.image_url,
             rating=data.rating,
-            user_id=user_id,
+            user_id=user.id,
             tag_ids=data.tag_ids,
         )
     except CreateCardService.CardNameInvalidException:
@@ -79,10 +81,10 @@ async def create_card(
     status_code=status.HTTP_200_OK,
 )
 async def get_user_cards(
-    user_id: int,  # TODO: Получать из JWT токена
+    user: UserEntity = Depends(get_current_user_from_token),
     service: GetUserCardsService = Depends(GetUserCardsService.build),
 ) -> CardsListResponseDTO:
-    cards = await service.execute(user_id)
+    cards = await service.execute(user.id)
 
     return CardsListResponseDTO(
         cards=[
@@ -107,11 +109,11 @@ async def get_user_cards(
 )
 async def get_card(
     card_id: int,
-    user_id: int,  # TODO: Получать из JWT токена
+    user: UserEntity = Depends(get_current_user_from_token),
     service: GetCardService = Depends(GetCardService.build),
 ) -> CardResponseDTO:
     try:
-        card_dto = await service.execute(card_id, user_id)
+        card_dto = await service.execute(card_id, user.id)
     except GetCardService.CardNotFoundException:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -140,13 +142,13 @@ async def get_card(
 async def update_card(
     card_id: int,
     data: UpdateCardRequestDTO,
-    user_id: int,  # TODO: Получать из JWT токена
+    user: UserEntity = Depends(get_current_user_from_token),
     service: UpdateCardService = Depends(UpdateCardService.build),
 ) -> CardResponseDTO:
     try:
         card_dto = await service.execute(
             card_id=card_id,
-            user_id=user_id,
+            user_id=user.id,
             name=data.name,
             description=data.description,
             image_url=data.image_url,
@@ -203,11 +205,11 @@ async def update_card(
 )
 async def delete_card(
     card_id: int,
-    user_id: int,  # TODO: Получать из JWT токена
+    user: UserEntity = Depends(get_current_user_from_token),
     service: DeleteCardService = Depends(DeleteCardService.build),
 ) -> None:
     try:
-        await service.execute(card_id, user_id)
+        await service.execute(card_id, user.id)
     except DeleteCardService.CardNotFoundException:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

@@ -36,6 +36,10 @@ class AuthDAO:
         deprecated='auto',
     )
 
+    @classmethod
+    def build(cls) -> 'AuthDAO':
+        return cls()
+
     async def generate_hashed_password(self, password: str) -> str:
         return self._pwd_context.hash(password)
 

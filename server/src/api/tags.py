@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 
+from common.get_current_user_from_token import get_current_user_from_token
 from services.tags import (
     CreateTagService,
     GetUserTagsService,
@@ -10,6 +11,7 @@ from dtos.tags import (
     TagResponseDTO,
     TagsListResponseDTO,
 )
+from daos.user_dao import UserEntity
 
 router = APIRouter(prefix='/tags', tags=['tags'])
 
@@ -21,14 +23,14 @@ router = APIRouter(prefix='/tags', tags=['tags'])
 )
 async def create_tag(
     data: CreateTagRequestDTO,
-    user_id: int,  # TODO: Получать из JWT токена
+    user: UserEntity = Depends(get_current_user_from_token),
     service: CreateTagService = Depends(CreateTagService.build),
 ) -> TagResponseDTO:
     try:
         tag_dto = await service.execute(
             name=data.name,
             color=data.color,
-            user_id=user_id,
+            user_id=user.id,
         )
     except CreateTagService.TagNameInvalidException:
         raise HTTPException(
@@ -77,10 +79,10 @@ async def create_tag(
     status_code=status.HTTP_200_OK,
 )
 async def get_user_tags(
-    user_id: int,  # TODO: Получать из JWT токена
+    user: UserEntity = Depends(get_current_user_from_token),
     service: GetUserTagsService = Depends(GetUserTagsService.build),
 ) -> TagsListResponseDTO:
-    tags = await service.execute(user_id)
+    tags = await service.execute(user.id)
 
     return TagsListResponseDTO(
         tags=[
@@ -104,11 +106,11 @@ async def get_user_tags(
 )
 async def delete_tag(
     tag_id: int,
-    user_id: int,  # TODO: Получать из JWT токена
+    user: UserEntity = Depends(get_current_user_from_token),
     service: DeleteTagService = Depends(DeleteTagService.build),
 ) -> None:
     try:
-        await service.execute(tag_id, user_id)
+        await service.execute(tag_id, user.id)
     except DeleteTagService.TagNotFoundException:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

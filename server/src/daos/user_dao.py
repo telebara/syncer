@@ -2,11 +2,14 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import NamedTuple, cast
 
+from fastapi import Depends
+
 from pydantic import EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select, exists
 
 from models import User
+from common.database import get_async_session
 
 
 class UserEntity(NamedTuple):
@@ -20,6 +23,10 @@ class UserEntity(NamedTuple):
 @dataclass
 class UserDAO:
     _session: AsyncSession
+
+    @classmethod
+    def build(cls, session: AsyncSession = Depends(get_async_session)) -> 'UserDAO':
+        return cls(session=session)
 
     async def _convert_obj_to_entity(self, obj: User) -> UserEntity:
         return UserEntity(
