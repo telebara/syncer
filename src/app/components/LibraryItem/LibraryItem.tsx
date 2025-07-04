@@ -65,21 +65,21 @@ const LibraryItem = ({ video, onClick }: LibraryItemProps) => {
         {truncateLongString(video.title, maxTitle)}
       </div>
       <div style={{ display: "flex", gap: 6, marginBottom: 6 }}>
-      <span
-        style={{
-          background: TAGS[video.tag].bg,
-          color: TAGS[video.tag].color,
-          borderRadius: 8,
-          padding: "2px 10px",
-          fontSize: 13,
-          fontWeight: 500,
-          border: `1px solid ${TAGS[video.tag].color}`,
-          letterSpacing: 0.2,
-          minWidth: 0,
-        }}
-      >
-        {video.tag}
-      </span>
+        <span
+          style={{
+            background: TAGS[video.tag].bg,
+            color: TAGS[video.tag].color,
+            borderRadius: 8,
+            padding: "2px 10px",
+            fontSize: 13,
+            fontWeight: 500,
+            border: `1px solid ${TAGS[video.tag].color}`,
+            letterSpacing: 0.2,
+            minWidth: 0,
+          }}
+        >
+          {video.tag}
+        </span>
       </div>
       <div
         style={{

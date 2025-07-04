@@ -1,12 +1,11 @@
 "use client";
 
-import styles from "./page.module.css";
 import { useState } from "react";
-import { getMockVideos, UserVideoDTO } from "../utils";
-import Avatar from "./components/Avatar/Avatar";
-import Library from "./components/Library/Library";
-import { User } from "firebase/auth";
+import styles from "./page.module.css";
 import { useFirebaseAuth } from "./context/FirebaseAuthContext";
+import { getMockVideos, UserVideoDTO } from "../utils";
+import { Avatar, Library } from "./components";
+import { User } from "firebase/auth";
 
 const HomePage = ({ user }: { user: User }) => {
   const { signOutUser, updateUserProfile } = useFirebaseAuth();
@@ -24,7 +23,7 @@ const HomePage = ({ user }: { user: User }) => {
 
   return (
     <>
-      <Avatar size={120} />
+      <Avatar size={120} showUsername={true}/>
       <div style={{ color: "#fff", margin: 8, fontSize: 18 }}>
         Ваше имя: <b>{user.displayName || user.email}</b>
       </div>

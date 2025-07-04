@@ -6,7 +6,7 @@ import { identicon } from "@dicebear/collection";
 import { getRandomUsername } from "../../utils";
 import { useFirebaseAuth } from "./FirebaseAuthContext";
 
-interface UserContextType {
+type UserContextType = {
   username: string;
   avatarDataUri: string;
 }
@@ -15,16 +15,22 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const { user, updateUserProfile } = useFirebaseAuth();
-  const [localUsername] = useState(() => getRandomUsername());
+  const [localUsername, setLocalUsername] = useState<string | null>(null);
 
   useEffect(() => {
-    if (user && !user.displayName) {
+    if (!localUsername) {
+      setLocalUsername(getRandomUsername());
+    }
+  }, [localUsername]);
+
+  useEffect(() => {
+    if (user && !user.displayName && localUsername) {
       updateUserProfile(localUsername);
     }
-  }, [user]);
+  }, [user, localUsername]);
 
-  let username = localUsername;
-  let avatarSeed = localUsername;
+  let username = localUsername || "";
+  let avatarSeed = localUsername || "";
 
   if (user) {
     username = user.displayName || user.email || "Пользователь";
@@ -37,11 +43,17 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
   const value = useMemo(() => ({ username, avatarDataUri }), [username, avatarDataUri]);
 
-  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
+  return (
+    <UserContext.Provider value={value}>
+      {(!user && !localUsername)
+        ? null
+        : children}
+    </UserContext.Provider>
+  );
 };
 
 export const useUser = (): UserContextType => {
   const ctx = useContext(UserContext);
   if (!ctx) throw new Error("useUser must be used within a UserProvider");
   return ctx;
-}; 
+};

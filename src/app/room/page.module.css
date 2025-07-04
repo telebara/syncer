@@ -41,4 +41,11 @@
   overflow: hidden;
   background: #222;
   box-shadow: 0 0 0 2px #111;
+}
+
+.roomMain {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  background: #181818;
 } 

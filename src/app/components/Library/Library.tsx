@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import LibraryItem from "../LibraryItem/LibraryItem";
 import { UserVideoDTO } from "../../../utils";
-import MoviePopup from "../MoviePopup/MoviePopup";
+import { LibraryItem, MoviePopup } from "../../components";
 
 interface LibraryProps {
   loggedIn: boolean;
