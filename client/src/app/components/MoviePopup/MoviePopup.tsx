@@ -1,4 +1,5 @@
-import { generateRoomCode, UserVideoDTO } from "../../../utils";
+import { generateRoomCode } from "../../../utils/room";
+import { UserVideoDTO } from "../../../types/cards";
 import { useRouter } from "next/navigation";
 import styles from "./MoviePopup.module.css";
 

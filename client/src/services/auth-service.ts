@@ -1,0 +1,88 @@
+import { HttpClient } from './http-client';
+import {
+  LoginRequestDTO,
+  RegisterRequestDTO,
+  LoginResponseDTO,
+  VerifyTokenRequestDTO,
+  RefreshTokenRequestDTO,
+  UserDTO
+} from '../types/auth';
+
+export interface AuthService {
+  login(data: LoginRequestDTO): Promise<LoginResponseDTO>;
+  register(data: RegisterRequestDTO): Promise<LoginResponseDTO>;
+  verifyToken(data: VerifyTokenRequestDTO): Promise<boolean>;
+  refreshToken(data: RefreshTokenRequestDTO): Promise<LoginResponseDTO>;
+  logout(): void;
+  isAuthenticated(): boolean;
+  getCurrentUser(): UserDTO | null;
+  setCurrentUser(user: UserDTO): void;
+}
+
+export class AuthServiceImpl implements AuthService {
+  constructor(private httpClient: HttpClient) {}
+
+  async login(data: LoginRequestDTO): Promise<LoginResponseDTO> {
+    const response = await this.httpClient.post<LoginResponseDTO>('/api/auth/login', data);
+    const tokens = response.data;
+
+    localStorage.setItem('access_token', tokens.access_token);
+    localStorage.setItem('refresh_token', tokens.refresh_token);
+
+    return tokens;
+  }
+
+  async register(data: RegisterRequestDTO): Promise<LoginResponseDTO> {
+    const response = await this.httpClient.post<LoginResponseDTO>('/api/auth/register', data);
+    const tokens = response.data;
+
+    localStorage.setItem('access_token', tokens.access_token);
+    localStorage.setItem('refresh_token', tokens.refresh_token);
+
+    return tokens;
+  }
+
+  async verifyToken(data: VerifyTokenRequestDTO): Promise<boolean> {
+    try {
+      await this.httpClient.post('/api/auth/verify', data);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  async refreshToken(data: RefreshTokenRequestDTO): Promise<LoginResponseDTO> {
+    const response = await this.httpClient.post<LoginResponseDTO>('/api/auth/refresh', data);
+    const tokens = response.data;
+
+    localStorage.setItem('access_token', tokens.access_token);
+    localStorage.setItem('refresh_token', tokens.refresh_token);
+
+    return tokens;
+  }
+
+  logout(): void {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('current_user');
+  }
+
+  isAuthenticated(): boolean {
+    return !!localStorage.getItem('access_token');
+  }
+
+  getCurrentUser(): UserDTO | null {
+    const userStr = localStorage.getItem('current_user');
+    if (!userStr) return null;
+
+    try {
+      return JSON.parse(userStr);
+    } catch {
+      return null;
+    }
+  }
+
+  setCurrentUser(user: UserDTO): void {
+    localStorage.setItem('current_user', JSON.stringify(user));
+  }
+}

@@ -1,4 +1,10 @@
-export const getMockVideos = () => {
+import { TAGS, TagType } from '../types/tags';
+import { UserVideoDTO } from '../types/cards';
+
+export { TAGS };
+export type { TagType };
+
+export const getMockVideos = (): UserVideoDTO[] => {
   return [
     {
       id: 1,
@@ -47,3 +53,7 @@ export const getMockVideos = () => {
     },
   ];
 };
+
+export const truncateLongString = (str: string, max: number) => {
+  return str.length > max ? str.slice(0, max - 1) + "..." : str;
+}

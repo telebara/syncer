@@ -1,5 +1,7 @@
 import React from "react";
-import { TAGS, truncateLongString, UserVideoDTO } from "../../../utils";
+import { TAGS, truncateLongString } from "../../../utils/common";
+import { UserVideoDTO } from "../../../types/cards";
+import { TagType } from "../../../types/tags";
 
 interface LibraryItemProps {
   video: UserVideoDTO;
@@ -67,13 +69,13 @@ const LibraryItem = ({ video, onClick }: LibraryItemProps) => {
       <div style={{ display: "flex", gap: 6, marginBottom: 6 }}>
         <span
           style={{
-            background: TAGS[video.tag].bg,
-            color: TAGS[video.tag].color,
+            background: TAGS[video.tag as TagType].bg,
+            color: TAGS[video.tag as TagType].color,
             borderRadius: 8,
             padding: "2px 10px",
             fontSize: 13,
             fontWeight: 500,
-            border: `1px solid ${TAGS[video.tag].color}`,
+            border: `1px solid ${TAGS[video.tag as TagType].color}`,
             letterSpacing: 0.2,
             minWidth: 0,
           }}

@@ -2,7 +2,7 @@
 
 import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { formatRoomCode } from "../../../utils";
+import { formatRoomCode } from "../../../utils/room";
 import { Avatar, Navbar, Chat } from "../../components";
 import styles from "../page.module.css";
 

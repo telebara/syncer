@@ -2,13 +2,14 @@
 
 import { useState } from "react";
 import styles from "./page.module.css";
-import { useFirebaseAuth } from "./context/FirebaseAuthContext";
-import { getMockVideos, UserVideoDTO } from "../utils";
+import { useAuth } from "./context/AuthContext";
+import { getMockVideos } from "../utils/common";
 import { Avatar, Library } from "./components";
-import { User } from "firebase/auth";
+import { UserDTO } from "../types/auth";
+import { UserVideoDTO } from "../types/cards";
 
-const HomePage = ({ user }: { user: User }) => {
-  const { signOutUser, updateUserProfile } = useFirebaseAuth();
+const HomePage = ({ user }: { user: UserDTO }) => {
+  const { logout, updateUser } = useAuth();
   const [newName, setNewName] = useState<string>("");
   const [nameLoading, setNameLoading] = useState<boolean>(false);
   const mockVideos: UserVideoDTO[] = getMockVideos();
@@ -16,16 +17,22 @@ const HomePage = ({ user }: { user: User }) => {
   const handleNameChange = async () => {
     if (!newName.trim()) return;
     setNameLoading(true);
-    await updateUserProfile(newName.trim());
-    setNewName("");
-    setNameLoading(false);
+    try {
+      await updateUser({ username: newName.trim() });
+      setNewName("");
+    } catch (error) {
+      console.error('Failed to update username:', error);
+      alert('Не удалось обновить имя пользователя');
+    } finally {
+      setNameLoading(false);
+    }
   };
 
   return (
     <>
       <Avatar size={120} showUsername={true}/>
       <div style={{ color: "#fff", margin: 8, fontSize: 18 }}>
-        Ваше имя: <b>{user.displayName || user.email}</b>
+        Ваше имя: <b>{user.username}</b>
       </div>
       <div
         style={{
@@ -75,7 +82,7 @@ const HomePage = ({ user }: { user: User }) => {
           fontSize: 16,
           cursor: "pointer",
         }}
-        onClick={signOutUser}
+        onClick={logout}
       >
         Выйти
       </button>
@@ -85,8 +92,9 @@ const HomePage = ({ user }: { user: User }) => {
 };
 
 const AuthPage = () => {
-  const { signIn, signUp } = useFirebaseAuth();
+  const { login, register } = useAuth();
   const [email, setEmail] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isRegister, setIsRegister] = useState<boolean>(false);
 
@@ -113,6 +121,20 @@ const AuthPage = () => {
           width: "100%",
         }}
       />
+      {isRegister && (
+        <input
+          type="text"
+          placeholder="Имя пользователя"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          style={{
+            padding: 10,
+            borderRadius: 8,
+            border: "1px solid #444",
+            width: "100%",
+          }}
+        />
+      )}
       <input
         type="password"
         placeholder="Пароль"
@@ -136,9 +158,17 @@ const AuthPage = () => {
           cursor: "pointer",
           width: "100%",
         }}
-        onClick={() =>
-          isRegister ? signUp(email, password) : signIn(email, password)
-        }
+        onClick={() => {
+          if (isRegister && (!email || !username || !password)) {
+            alert('Пожалуйста, заполните все поля');
+            return;
+          }
+          if (!isRegister && (!email || !password)) {
+            alert('Пожалуйста, заполните email и пароль');
+            return;
+          }
+          isRegister ? register(email, username, password) : login(email, password);
+        }}
       >
         {isRegister ? "Зарегистрироваться" : "Войти"}
       </button>
@@ -161,7 +191,7 @@ const AuthPage = () => {
 };
 
 const Page = () => {
-  const { user, loading } = useFirebaseAuth();
+  const { user, loading } = useAuth();
 
   if (loading) {
     return (
