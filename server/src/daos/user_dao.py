@@ -26,7 +26,7 @@ class UserDAO:
 
     @classmethod
     def build(cls, session: AsyncSession = Depends(get_async_session)) -> 'UserDAO':
-        return cls(session=session)
+        return cls(_session=session)
 
     async def _convert_obj_to_entity(self, obj: User) -> UserEntity:
         return UserEntity(
