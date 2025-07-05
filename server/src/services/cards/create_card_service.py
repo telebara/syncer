@@ -18,9 +18,6 @@ class CreateCardService:
     class CardNameTooLongException(Exception):
         pass
 
-    class RatingInvalidException(Exception):
-        pass
-
     @classmethod
     def build(
         cls,
@@ -35,8 +32,8 @@ class CreateCardService:
         name: str,
         description: str | None,
         image_url: str | None,
-        rating: float | None,
         user_id: int,
+        magnet_link: str,
         tag_ids: list[int] | None = None,
     ) -> CardDTO:
         if not name.strip():
@@ -45,15 +42,11 @@ class CreateCardService:
         if len(name) > 255:
             raise self.CardNameTooLongException
 
-        if rating is not None:
-            if not (0.0 <= rating <= 10.0):
-                raise self.RatingInvalidException
-
         card_entity = await self._card_dao.create_card(
             name=name,
             description=description,
             image_url=image_url,
-            rating=rating,
+            magnet_link=magnet_link,
             user_id=user_id,
             tag_ids=tag_ids,
         )
@@ -64,6 +57,7 @@ class CreateCardService:
             description=card_entity.description,
             image_url=card_entity.image_url,
             rating=card_entity.rating,
+            magnet_link=card_entity.magnet_link,
             user_id=card_entity.user_id,
             created_at=card_entity.created_at.isoformat(),
             tags=card_entity.tags,

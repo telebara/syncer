@@ -40,6 +40,7 @@ class GetCardService:
             description=card_entity.description,
             image_url=card_entity.image_url,
             rating=card_entity.rating,
+            magnet_link=card_entity.magnet_link,
             user_id=card_entity.user_id,
             created_at=card_entity.created_at.isoformat(),
             tags=card_entity.tags,

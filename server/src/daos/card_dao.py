@@ -15,6 +15,7 @@ class CardEntity(NamedTuple):
     description: str | None
     image_url: str | None
     rating: float | None
+    magnet_link: str
     user_id: int
     created_at: datetime
 
@@ -25,6 +26,7 @@ class CardWithTagsEntity(NamedTuple):
     description: str | None
     image_url: str | None
     rating: float | None
+    magnet_link: str
     user_id: int
     created_at: datetime
     tags: list[TagShortDTO]
@@ -75,23 +77,22 @@ class CardDAO:
         name: str,
         description: str | None,
         image_url: str | None,
-        rating: float | None,
         user_id: int,
+        magnet_link: str,
         tag_ids: list[int] | None = None,
     ) -> CardWithTagsEntity:
         card = Card(
             name=name,
             description=description,
             image_url=image_url,
-            rating=rating,
             user_id=user_id,
+            magnet_link=magnet_link,
         )
 
         self._session.add(card)
         await self._session.commit()
         await self._session.refresh(card)
 
-        # Добавляем теги, если они указаны
         if tag_ids:
             for tag_id in tag_ids:
                 card_tag = CardTag(
@@ -128,7 +129,7 @@ class CardDAO:
         name: str | None = None,
         description: str | None = None,
         image_url: str | None = None,
-        rating: float | None = None,
+        magnet_link: str | None = None,
         tag_ids: list[int] | None = None,
     ) -> CardWithTagsEntity | None:
         query = select(Card).where(
@@ -141,19 +142,16 @@ class CardDAO:
         if not card_obj:
             return None
 
-        # Обновляем поля карточки
         if name is not None:
             card_obj.name = name
         if description is not None:
             card_obj.description = description
         if image_url is not None:
             card_obj.image_url = image_url
-        if rating is not None:
-            card_obj.rating = rating
+        if magnet_link is not None:
+            card_obj.magnet_link = magnet_link
 
-        # Обновляем теги, если они указаны
         if tag_ids is not None:
-            # Удаляем старые связи с тегами
             delete_query = select(CardTag).where(CardTag.card_id == card_id)
             delete_result = await self._session.execute(delete_query)
             old_card_tags = delete_result.scalars().all()
@@ -161,7 +159,6 @@ class CardDAO:
             for old_card_tag in old_card_tags:
                 await self._session.delete(old_card_tag)
 
-            # Добавляем новые связи с тегами
             for tag_id in tag_ids:
                 card_tag = CardTag(
                     card_id=card_id,
@@ -186,7 +183,6 @@ class CardDAO:
         if not card_obj:
             return False
 
-        # Удаляем связи с тегами
         delete_query = select(CardTag).where(CardTag.card_id == card_id)
         delete_result = await self._session.execute(delete_query)
         card_tags = delete_result.scalars().all()
@@ -194,7 +190,6 @@ class CardDAO:
         for card_tag in card_tags:
             await self._session.delete(card_tag)
 
-        # Удаляем саму карточку
         await self._session.delete(card_obj)
         await self._session.commit()
 

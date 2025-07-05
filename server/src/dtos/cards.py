@@ -9,7 +9,7 @@ class CreateCardRequestDTO(BaseModel):
     name: str
     description: str | None = None
     image_url: str | None = None
-    rating: float | None = None
+    magnet_link: str
     tag_ids: list[int] | None = None
 
 
@@ -17,7 +17,6 @@ class UpdateCardRequestDTO(BaseModel):
     name: str | None = None
     description: str | None = None
     image_url: str | None = None
-    rating: float | None = None
     tag_ids: list[int] | None = None
 
 
@@ -32,6 +31,7 @@ class CardResponseDTO(BaseModel):
     name: str
     description: str | None
     image_url: str | None
+    magnet_link: str
     rating: float | None
     created_at: str
     tags: list[TagDTO]
@@ -47,6 +47,7 @@ class CardDTO:
     name: str
     description: str | None
     image_url: str | None
+    magnet_link: str
     rating: float | None
     user_id: int
     created_at: str
