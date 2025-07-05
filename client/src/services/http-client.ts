@@ -129,4 +129,4 @@ export class AxiosHttpClient implements HttpClient {
   }
 }
 
-export const httpClient = new AxiosHttpClient(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080');
+export const httpClient = new AxiosHttpClient(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:6969');

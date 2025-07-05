@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { UserVideoDTO } from "../../../utils";
+import { UserVideoDTO } from "../../../types/cards";
 import { LibraryItem, MoviePopup } from "../../components";
 
 interface LibraryProps {
@@ -13,7 +13,7 @@ const Library = ({ loggedIn, videos }: LibraryProps) => {
   return (
     <section>
       <h2
-        style={{ color: "#fff", marginTop: 32, fontSize: 24, fontWeight: 700 }}
+        style={{ color: "#fff", fontSize: 24, fontWeight: 700, marginTop: 32 }}
       >
         Библиотека
       </h2>
