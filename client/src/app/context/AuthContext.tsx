@@ -92,7 +92,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const updateUser = async (data: { username?: string; image?: string }) => {
     try {
-      const userData = await userService.updateMe(data);
+      const userData = await userService.updateMe({
+        username: data.username,
+        image: data.image,
+      });
       const currentUser: UserDTO = {
         id: userData.id,
         email: userData.email,
