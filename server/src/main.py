@@ -12,12 +12,20 @@ def build_app() -> FastAPI:
         description=settings.app.DESCRIPTION,
         **settings.app.swagger_kwargs,
     )
+
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=settings.app.ALLOW_ORIGINS,
+        allow_origins=[
+            "http://localhost:3000",
+            "http://127.0.0.1:3000",
+            "http://localhost:6970",
+            "http://127.0.0.1:6970",
+            "*"
+        ],
         allow_credentials=True,
-        allow_methods=settings.app.ALLOW_METHODS,
-        allow_headers=settings.app.ALLOW_HEADERS,
+        allow_methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+        allow_headers=["*"],
+        expose_headers=["*"],
     )
 
     return app
