@@ -4,7 +4,6 @@ import {
   UpdateCardRequestDTO,
   CardDTO,
   CardsListResponseDTO,
-  UserVideoDTO
 } from '../types/cards';
 
 export interface CardsService {
@@ -13,8 +12,6 @@ export interface CardsService {
   createCard(data: CreateCardRequestDTO): Promise<CardDTO>;
   updateCard(id: number, data: UpdateCardRequestDTO): Promise<CardDTO>;
   deleteCard(id: number): Promise<boolean>;
-  // Метод для конвертации CardDTO в UserVideoDTO для совместимости
-  convertToUserVideoDTO(card: CardDTO): UserVideoDTO;
 }
 
 export class CardsServiceImpl implements CardsService {
@@ -43,17 +40,5 @@ export class CardsServiceImpl implements CardsService {
   async deleteCard(id: number): Promise<boolean> {
     await this.httpClient.delete(`/api/cards/${id}`);
     return true;
-  }
-
-  convertToUserVideoDTO(card: CardDTO): UserVideoDTO {
-    return {
-      id: card.id,
-      title: card.name,
-      thumb: card.image_url || '/file.svg',
-      description: card.description || 'Описание отсутствует',
-      rating: card.rating || 0,
-      ratingCount: 0, // Это поле не хранится в базе, поэтому ставим 0
-      tag: card.tags.length > 0 ? card.tags[0].name : 'К просмотру',
-    };
   }
 }

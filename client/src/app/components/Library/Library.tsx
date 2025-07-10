@@ -1,14 +1,19 @@
 import React, { useState } from "react";
-import { UserVideoDTO } from "../../../types/cards";
-import { LibraryItem, MoviePopup } from "../../components";
+import { CardDTO } from "../../../types/cards";
+import { LibraryItem, ViewCardPopup } from "../../components";
 
 interface LibraryProps {
-  loggedIn: boolean;
-  videos: UserVideoDTO[];
+  videos: CardDTO[];
+  onCardDeleted?: () => void;
 }
 
-const Library = ({ loggedIn, videos }: LibraryProps) => {
-  const [selected, setSelected] = useState<UserVideoDTO | null>(null);
+const Library = ({ videos, onCardDeleted }: LibraryProps) => {
+  const [selected, setSelected] = useState<CardDTO | null>(null);
+
+  const handleCardDeleted = () => {
+    onCardDeleted?.();
+    setSelected(null);
+  };
 
   return (
     <section>
@@ -17,7 +22,6 @@ const Library = ({ loggedIn, videos }: LibraryProps) => {
       >
         Библиотека
       </h2>
-      {loggedIn ? (
         <div
           style={{
             display: "grid",
@@ -34,15 +38,14 @@ const Library = ({ loggedIn, videos }: LibraryProps) => {
               video={video}
               onClick={() => setSelected(video)}
             />
-          ))}
-        </div>
-      ) : (
-        <div style={{ color: "#aaa", margin: "32px 0", fontSize: 18 }}>
-          Библиотека доступна только зарегистрированным пользователям
-        </div>
-      )}
+        ))}
+      </div>
       {selected && (
-        <MoviePopup video={selected} onClose={() => setSelected(null)} />
+        <ViewCardPopup
+          card={selected}
+          onClose={() => setSelected(null)}
+          onDelete={handleCardDeleted}
+        />
       )}
     </section>
   );

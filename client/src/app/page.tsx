@@ -2,7 +2,7 @@
 
 import styles from "./page.module.css";
 import { useAuth } from "./context/AuthContext";
-import { Home, Auth } from "./components";
+import { Home, Auth, Sidebar } from "./components";
 
 const Page = () => {
   const { user, loading } = useAuth();
@@ -17,6 +17,7 @@ const Page = () => {
 
   return (
     <div className={styles.page}>
+      {user && <Sidebar />}
       <main className={styles.main}>
         {user ? <Home user={user} /> : <Auth />}
       </main>
