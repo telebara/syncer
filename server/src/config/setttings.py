@@ -72,7 +72,6 @@ class ApplicationSettings(BaseSettings):
     @property
     def swagger_kwargs(self) -> dict:
         return {
-            'root_path': '/api',
             'openapi_url': '/openapi.json',
             'docs_url': '/docs',
             'redoc_url': None,

@@ -7,6 +7,7 @@ import {
   RefreshTokenRequestDTO,
   UserDTO
 } from '../types/auth';
+import { storage } from '../utils/storage';
 
 export interface AuthService {
   login(data: LoginRequestDTO): Promise<LoginResponseDTO>;
@@ -26,8 +27,8 @@ export class AuthServiceImpl implements AuthService {
     const response = await this.httpClient.post<LoginResponseDTO>('/api/auth/login', data);
     const tokens = response.data;
 
-    localStorage.setItem('access_token', tokens.access_token);
-    localStorage.setItem('refresh_token', tokens.refresh_token);
+    storage.setItem('access_token', tokens.access_token);
+    storage.setItem('refresh_token', tokens.refresh_token);
 
     return tokens;
   }
@@ -36,8 +37,8 @@ export class AuthServiceImpl implements AuthService {
     const response = await this.httpClient.post<LoginResponseDTO>('/api/auth/register', data);
     const tokens = response.data;
 
-    localStorage.setItem('access_token', tokens.access_token);
-    localStorage.setItem('refresh_token', tokens.refresh_token);
+    storage.setItem('access_token', tokens.access_token);
+    storage.setItem('refresh_token', tokens.refresh_token);
 
     return tokens;
   }
@@ -55,24 +56,24 @@ export class AuthServiceImpl implements AuthService {
     const response = await this.httpClient.post<LoginResponseDTO>('/api/auth/refresh', data);
     const tokens = response.data;
 
-    localStorage.setItem('access_token', tokens.access_token);
-    localStorage.setItem('refresh_token', tokens.refresh_token);
+    storage.setItem('access_token', tokens.access_token);
+    storage.setItem('refresh_token', tokens.refresh_token);
 
     return tokens;
   }
 
   logout(): void {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    localStorage.removeItem('current_user');
+    storage.removeItem('access_token');
+    storage.removeItem('refresh_token');
+    storage.removeItem('current_user');
   }
 
   isAuthenticated(): boolean {
-    return !!localStorage.getItem('access_token');
+    return !!storage.getItem('access_token');
   }
 
   getCurrentUser(): UserDTO | null {
-    const userStr = localStorage.getItem('current_user');
+    const userStr = storage.getItem('current_user');
     if (!userStr) return null;
 
     try {
@@ -83,6 +84,6 @@ export class AuthServiceImpl implements AuthService {
   }
 
   setCurrentUser(user: UserDTO): void {
-    localStorage.setItem('current_user', JSON.stringify(user));
+    storage.setItem('current_user', JSON.stringify(user));
   }
 }

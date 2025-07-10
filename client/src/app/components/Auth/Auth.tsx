@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
+import { generateAvatarUrl } from "../../../utils/avatar";
 
 const AuthPage = () => {
   const { login, register } = useAuth();
@@ -7,6 +8,35 @@ const AuthPage = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isRegister, setIsRegister] = useState<boolean>(false);
+
+  const handleRegister = async () => {
+    if (!email || !username || !password) {
+      alert("Пожалуйста, заполните все поля");
+      return;
+    }
+
+    try {
+      const avatarUrl = generateAvatarUrl(email);
+      await register(email, username, password, avatarUrl);
+    } catch (error) {
+      console.error("Registration error:", error);
+      alert("Ошибка при регистрации");
+    }
+  };
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      alert("Пожалуйста, заполните email и пароль");
+      return;
+    }
+
+    try {
+      await login(email, password);
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("Ошибка при входе");
+    }
+  };
 
   return (
     <div
@@ -67,19 +97,7 @@ const AuthPage = () => {
           cursor: "pointer",
           width: "100%",
         }}
-        onClick={() => {
-          if (isRegister && (!email || !username || !password)) {
-            alert("Пожалуйста, заполните все поля");
-            return;
-          }
-          if (!isRegister && (!email || !password)) {
-            alert("Пожалуйста, заполните email и пароль");
-            return;
-          }
-          isRegister
-            ? register(email, username, password)
-            : login(email, password);
-        }}>
+        onClick={isRegister ? handleRegister : handleLogin}>
         {isRegister ? "Зарегистрироваться" : "Войти"}
       </button>
       <button

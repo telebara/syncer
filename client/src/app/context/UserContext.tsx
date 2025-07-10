@@ -1,9 +1,8 @@
 "use client"
 
 import React, { createContext, useContext, useMemo, ReactNode } from "react";
-import { createAvatar } from "@dicebear/core";
-import { identicon } from "@dicebear/collection";
 import { useAuth } from "./AuthContext";
+import { generateAvatarUrl, generateDefaultAvatarUrl } from "../../utils/avatar";
 
 type UserContextType = {
   username: string | undefined;
@@ -22,7 +21,12 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     if (user?.image) {
       return user.image;
     }
-    return createAvatar(identicon, { seed: avatarSeed }).toDataUri();
+
+    if (avatarSeed) {
+      return generateAvatarUrl(avatarSeed);
+    }
+
+    return generateDefaultAvatarUrl();
   }, [user?.image, avatarSeed]);
 
   const value = useMemo(() => ({ username, avatarDataUri }), [username, avatarDataUri]);

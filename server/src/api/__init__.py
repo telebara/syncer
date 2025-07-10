@@ -5,7 +5,7 @@ from .tags import router as tags_router
 from .cards import router as cards_router
 from .user import router as user_router
 
-router = APIRouter()
+router = APIRouter(prefix="/api")
 router.include_router(auth_router)
 router.include_router(tags_router)
 router.include_router(cards_router)

@@ -6,6 +6,7 @@ import axios, {
   AxiosRequestConfig
 } from 'axios';
 import { RefreshTokenResponse } from '../types/auth';
+import { storage, isClient } from '../utils/storage';
 
 export interface HttpClient {
   get<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>>;
@@ -35,9 +36,11 @@ export class AxiosHttpClient implements HttpClient {
   private setupInterceptors() {
     this.client.interceptors.request.use(
       (config: InternalAxiosRequestConfig<any>) => {
-        const token = localStorage.getItem('access_token');
-        if (token && config.headers) {
-          config.headers.Authorization = `Bearer ${token}`;
+        if (isClient) {
+          const token = storage.getItem('access_token');
+          if (token && config.headers) {
+            config.headers.Authorization = `Bearer ${token}`;
+          }
         }
         return config;
       },
@@ -49,7 +52,7 @@ export class AxiosHttpClient implements HttpClient {
       async (error: AxiosError) => {
         const originalRequest = error.config as ExtendedAxiosRequestConfig;
 
-        if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
+        if (error.response?.status === 401 && originalRequest && !originalRequest._retry && isClient) {
           originalRequest._retry = true;
 
           try {
@@ -59,9 +62,11 @@ export class AxiosHttpClient implements HttpClient {
               return this.client(originalRequest);
             }
           } catch (refreshError) {
-            localStorage.removeItem('access_token');
-            localStorage.removeItem('refresh_token');
-            window.location.href = '/';
+            if (isClient) {
+              storage.removeItem('access_token');
+              storage.removeItem('refresh_token');
+              window.location.href = '/';
+            }
             return Promise.reject(refreshError);
           }
         }
@@ -86,7 +91,11 @@ export class AxiosHttpClient implements HttpClient {
   }
 
   private async performRefreshToken(): Promise<string> {
-    const refreshToken = localStorage.getItem('refresh_token');
+    if (!isClient) {
+      throw new Error('No refresh token available');
+    }
+
+    const refreshToken = storage.getItem('refresh_token');
     if (!refreshToken) {
       throw new Error('No refresh token available');
     }
@@ -99,8 +108,8 @@ export class AxiosHttpClient implements HttpClient {
 
       const { access_token, refresh_token } = response.data;
 
-      localStorage.setItem('access_token', access_token);
-      localStorage.setItem('refresh_token', refresh_token);
+      storage.setItem('access_token', access_token);
+      storage.setItem('refresh_token', refresh_token);
 
       return access_token;
     } catch (error) {
@@ -129,4 +138,4 @@ export class AxiosHttpClient implements HttpClient {
   }
 }
 
-export const httpClient = new AxiosHttpClient(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:6969');
+export const httpClient = new AxiosHttpClient(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:6970');

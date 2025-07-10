@@ -22,10 +22,17 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<UserDTO | null>(null);
   const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
   const [authService] = useState<AuthService>(() => new AuthServiceImpl(httpClient));
   const [userService] = useState<UserService>(() => new UserServiceImpl(httpClient));
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+
     const initializeAuth = async () => {
       try {
         if (authService.isAuthenticated()) {
@@ -49,7 +56,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     initializeAuth();
-  }, [authService, userService]);
+  }, [authService, userService, mounted]);
 
   const login = async (email: string, password: string) => {
     try {
@@ -118,12 +125,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const value = {
     user,
-    loading,
+    loading: mounted ? loading : true, // Показываем loading до монтирования
     login,
     register,
     updateUser,
     logout,
-    isAuthenticated: authService.isAuthenticated(),
+    isAuthenticated: mounted ? authService.isAuthenticated() : false,
   };
 
   return (

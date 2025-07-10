@@ -3,12 +3,6 @@ x-postgres-creds: &postgres-creds
   POSTGRES_PASSWORD: syncer_pass
   POSTGRES_DB: syncer_db
 
-x-nginx-params: &nginx-params
-  volumes:
-    - ./nginx/dev.conf:/etc/nginx/nginx.conf:ro
-  depends_on:
-    - syncer-service
-
 x-app-params: &app-params
   stdin_open: true
   tty: true
@@ -29,17 +23,8 @@ services:
     <<: *app-params
     container_name: syncer-service
     command: python main.py
-    expose:
-      - "8080"
-    networks:
-      - syncer_network
-
-  syncer-proxy:
-    <<: *nginx-params
-    image: nginx:1.27.0
-    container_name: nginx
     ports:
-      - "6969:80"
+      - "6970:8080"
     networks:
       - syncer_network
 
