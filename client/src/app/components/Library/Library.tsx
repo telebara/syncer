@@ -5,9 +5,10 @@ import { LibraryItem, ViewCardPopup, AddTagsPopup } from "../../components";
 interface LibraryProps {
   videos: CardDTO[];
   onCardDeleted?: () => void;
+  onModalStateChange?: (hasOpenModal: boolean) => void;
 }
 
-const Library = ({ videos, onCardDeleted }: LibraryProps) => {
+const Library = ({ videos, onCardDeleted, onModalStateChange }: LibraryProps) => {
   const [selected, setSelected] = useState<CardDTO | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [addTagsCard, setAddTagsCard] = useState<CardDTO | null>(null);
@@ -32,6 +33,11 @@ const Library = ({ videos, onCardDeleted }: LibraryProps) => {
   const handleAddTagsSuccess = () => {
     onCardDeleted?.();
   };
+
+  React.useEffect(() => {
+    const hasOpenModal = selected !== null || addTagsCard !== null;
+    onModalStateChange?.(hasOpenModal);
+  }, [selected, addTagsCard, onModalStateChange]);
 
   return (
     <section>

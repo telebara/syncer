@@ -27,6 +27,18 @@
   box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
 }
 
+.fab.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+  filter: grayscale(50%);
+}
+
+.fab.disabled:hover {
+  transform: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
 .fab.expanded {
   width: 200px;
   padding-right: 16px;

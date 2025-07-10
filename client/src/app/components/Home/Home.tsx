@@ -11,6 +11,7 @@ const cardsService = new CardsServiceImpl(httpClient);
 
 const HomePage = ({ user }: { user: UserDTO }) => {
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [hasLibraryModal, setHasLibraryModal] = useState(false);
   const [cards, setCards] = useState<CardDTO[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -45,12 +46,17 @@ const HomePage = ({ user }: { user: UserDTO }) => {
           Загрузка карточек...
         </div>
       ) : (
-        <Library videos={cards} onCardDeleted={handleCardDeleted} />
+        <Library
+          videos={cards}
+          onCardDeleted={handleCardDeleted}
+          onModalStateChange={setHasLibraryModal}
+        />
       )}
 
       <FloatingActionButton
         onClick={() => setShowCreateModal(true)}
         visible={true}
+        disabled={showCreateModal || hasLibraryModal}
       />
 
       {showCreateModal && (
