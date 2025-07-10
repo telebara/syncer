@@ -63,7 +63,7 @@ async def create_card(
         image_url=card_dto.image_url,
         magnet_link=card_dto.magnet_link,
         created_at=card_dto.created_at,
-        tags=[TagDTO(**tag) for tag in card_dto.tags],
+        tags=[TagDTO(id=tag.id, name=tag.name, color=tag.color) for tag in card_dto.tags],
     )
 
 
@@ -87,7 +87,7 @@ async def get_user_cards(
                 image_url=card.image_url,
                 magnet_link=card.magnet_link,
                 created_at=card.created_at,
-                tags=[TagDTO(**tag) for tag in card.tags],
+                tags=[TagDTO(id=tag.id, name=tag.name, color=tag.color) for tag in card.tags],
             )
             for card in cards
         ]
@@ -122,7 +122,7 @@ async def get_card(
         image_url=card_dto.image_url,
         magnet_link=card_dto.magnet_link,
         created_at=card_dto.created_at,
-        tags=[TagDTO(**tag) for tag in card_dto.tags],
+        tags=[TagDTO(id=tag.id, name=tag.name, color=tag.color) for tag in card_dto.tags],
     )
 
 
@@ -178,7 +178,7 @@ async def update_card(
         image_url=card_dto.image_url,
         magnet_link=card_dto.magnet_link,
         created_at=card_dto.created_at,
-        tags=[TagDTO(**tag) for tag in card_dto.tags],
+        tags=[TagDTO(id=tag.id, name=tag.name, color=tag.color) for tag in card_dto.tags],
     )
 
 

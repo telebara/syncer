@@ -9,3 +9,4 @@ export { default as Chat } from "./Chat/Chat";
 export { default as Home } from "./Home/Home";
 export { default as Auth } from "./Auth/Auth";
 export { Sidebar } from "./Sidebar/Sidebar";
+export { AddTagsPopup } from "./AddTagsPopup/AddTagsPopup";

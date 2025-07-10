@@ -6,9 +6,10 @@ import { TagType } from "../../../types/tags";
 interface LibraryItemProps {
   video: CardDTO;
   onClick?: () => void;
+  onAddTags?: (card: CardDTO) => void;
 }
 
-const LibraryItem = ({ video, onClick }: LibraryItemProps) => {
+const LibraryItem = ({ video, onClick, onAddTags }: LibraryItemProps) => {
   const maxTitle = 22;
   const maxDesc = 60;
   const showTitleTooltip = video.name.length > maxTitle;
@@ -28,13 +29,13 @@ const LibraryItem = ({ video, onClick }: LibraryItemProps) => {
           <span
             key={tag.id}
             style={{
-              background: TAGS[tag.name as TagType]?.bg || '#1e293b',
-              color: TAGS[tag.name as TagType]?.color || '#3b82f6',
+              background: tag.color + '22',
+              color: tag.color,
               borderRadius: 6,
               padding: "2px 8px",
               fontSize: 12,
               fontWeight: 500,
-              border: `1px solid ${TAGS[tag.name as TagType]?.color || '#3b82f6'}`,
+              border: `1px solid ${tag.color}`,
               letterSpacing: 0.2,
               minWidth: 0,
             }}
@@ -99,18 +100,55 @@ const LibraryItem = ({ video, onClick }: LibraryItemProps) => {
       />
       <div
         style={{
-          color: "#fff",
-          fontWeight: 700,
-          fontSize: 16,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
           marginBottom: 4,
-          textShadow: "0 1px 4px #0006",
-          whiteSpace: "nowrap",
-          overflow: "hidden",
-          textOverflow: "ellipsis",
         }}
-        title={showTitleTooltip ? video.name : undefined}
       >
-        {truncateLongString(video.name, maxTitle)}
+        <div
+          style={{
+            color: "#fff",
+            fontWeight: 700,
+            fontSize: 16,
+            textShadow: "0 1px 4px #0006",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            flex: 1,
+          }}
+          title={showTitleTooltip ? video.name : undefined}
+        >
+          {truncateLongString(video.name, maxTitle)}
+        </div>
+        {hover && onAddTags && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onAddTags(video);
+            }}
+            style={{
+              background: "#a78bfa",
+              color: "#fff",
+              border: "none",
+              borderRadius: "50%",
+              width: 24,
+              height: 24,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              fontSize: 16,
+              fontWeight: "bold",
+              marginLeft: 8,
+              transition: "background-color 0.2s",
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.background = "#8b5cf6"}
+            onMouseLeave={(e) => e.currentTarget.style.background = "#a78bfa"}
+          >
+            +
+          </button>
+        )}
       </div>
       {renderTags()}
       <div
