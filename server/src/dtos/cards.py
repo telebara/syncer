@@ -32,7 +32,6 @@ class CardResponseDTO(BaseModel):
     description: str | None
     image_url: str | None
     magnet_link: str
-    rating: float | None
     created_at: str
     tags: list[TagDTO]
 
@@ -48,7 +47,6 @@ class CardDTO:
     description: str | None
     image_url: str | None
     magnet_link: str
-    rating: float | None
     user_id: int
     created_at: str
     tags: list[TagShortDTO]

@@ -31,7 +31,6 @@ class GetUserCardsService:
                 name=card.name,
                 description=card.description,
                 image_url=card.image_url,
-                rating=card.rating,
                 magnet_link=card.magnet_link,
                 user_id=card.user_id,
                 created_at=card.created_at.isoformat(),

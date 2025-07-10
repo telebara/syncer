@@ -69,7 +69,6 @@ class UpdateCardService:
             name=updated_card.name,
             description=updated_card.description,
             image_url=updated_card.image_url,
-            rating=updated_card.rating,
             magnet_link=updated_card.magnet_link,
             user_id=updated_card.user_id,
             created_at=updated_card.created_at.isoformat(),

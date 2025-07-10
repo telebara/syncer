@@ -24,12 +24,6 @@ class Card(BaseModel, table=True):
     description: str | None
     image_url: str | None
     magnet_link: str
-    rating: float | None = Field(
-        sa_column=Column(
-            Float(precision=2),
-            nullable=True,
-        )
-    )
     user_id: int = Field(
         sa_column=Column(
             Integer,

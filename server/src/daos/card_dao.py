@@ -14,7 +14,6 @@ class CardEntity(NamedTuple):
     name: str
     description: str | None
     image_url: str | None
-    rating: float | None
     magnet_link: str
     user_id: int
     created_at: datetime
@@ -25,7 +24,6 @@ class CardWithTagsEntity(NamedTuple):
     name: str
     description: str | None
     image_url: str | None
-    rating: float | None
     magnet_link: str
     user_id: int
     created_at: datetime
@@ -42,7 +40,7 @@ class CardDAO:
             name=obj.name,
             description=obj.description,
             image_url=obj.image_url,
-            rating=obj.rating,
+            magnet_link=obj.magnet_link,
             user_id=obj.user_id,
             created_at=obj.created_at,
         )
@@ -66,8 +64,8 @@ class CardDAO:
             name=obj.name,
             description=obj.description,
             image_url=obj.image_url,
-            rating=obj.rating,
             user_id=obj.user_id,
+            magnet_link=obj.magnet_link,
             created_at=obj.created_at,
             tags=tags_data,
         )

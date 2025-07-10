@@ -35,7 +35,7 @@ async def create_card(
             name=data.name,
             description=data.description,
             image_url=data.image_url,
-            rating=data.rating,
+            magnet_link=data.magnet_link,
             user_id=user.id,
             tag_ids=data.tag_ids,
         )
@@ -55,21 +55,13 @@ async def create_card(
                 'message': 'Card name cannot exceed 255 characters',
             },
         )
-    except CreateCardService.RatingInvalidException:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail={
-                'code': 'rating_invalid',
-                'message': 'Rating must be between 0.0 and 10.0',
-            },
-        )
 
     return CardResponseDTO(
         id=card_dto.id,
         name=card_dto.name,
         description=card_dto.description,
         image_url=card_dto.image_url,
-        rating=card_dto.rating,
+        magnet_link=card_dto.magnet_link,
         created_at=card_dto.created_at,
         tags=[TagDTO(**tag) for tag in card_dto.tags],
     )
@@ -93,7 +85,7 @@ async def get_user_cards(
                 name=card.name,
                 description=card.description,
                 image_url=card.image_url,
-                rating=card.rating,
+                magnet_link=card.magnet_link,
                 created_at=card.created_at,
                 tags=[TagDTO(**tag) for tag in card.tags],
             )
@@ -128,7 +120,7 @@ async def get_card(
         name=card_dto.name,
         description=card_dto.description,
         image_url=card_dto.image_url,
-        rating=card_dto.rating,
+        magnet_link=card_dto.magnet_link,
         created_at=card_dto.created_at,
         tags=[TagDTO(**tag) for tag in card_dto.tags],
     )
@@ -152,7 +144,6 @@ async def update_card(
             name=data.name,
             description=data.description,
             image_url=data.image_url,
-            rating=data.rating,
             tag_ids=data.tag_ids,
         )
     except UpdateCardService.CardNotFoundException:
@@ -179,21 +170,13 @@ async def update_card(
                 'message': 'Card name cannot exceed 255 characters',
             },
         )
-    except UpdateCardService.RatingInvalidException:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail={
-                'code': 'rating_invalid',
-                'message': 'Rating must be between 0.0 and 10.0',
-            },
-        )
 
     return CardResponseDTO(
         id=card_dto.id,
         name=card_dto.name,
         description=card_dto.description,
         image_url=card_dto.image_url,
-        rating=card_dto.rating,
+        magnet_link=card_dto.magnet_link,
         created_at=card_dto.created_at,
         tags=[TagDTO(**tag) for tag in card_dto.tags],
     )
