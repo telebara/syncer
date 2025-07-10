@@ -149,7 +149,7 @@ class CardDAO:
         if magnet_link is not None:
             card_obj.magnet_link = magnet_link
 
-        if tag_ids:
+        if tag_ids is not None:
             delete_query = select(CardTag).where(CardTag.card_id == card_id)
             delete_result = await self._session.execute(delete_query)
             old_card_tags = delete_result.scalars().all()
