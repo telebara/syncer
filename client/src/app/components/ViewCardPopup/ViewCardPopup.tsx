@@ -19,7 +19,16 @@ const ViewCardPopup = ({ card, onClose, onDelete }: ViewCardPopupProps) => {
   const [deleting, setDeleting] = useState(false);
 
   const handleCreateRoom = () => {
-    router.push(`/room/${generateRoomCode()}`);
+    const roomCode = generateRoomCode();
+
+    const roomData = {
+      cardName: card.name,
+      magnetLink: card.magnet_link,
+      cardImageUrl: card.image_url
+    };
+
+    sessionStorage.setItem(`room-${roomCode}`, JSON.stringify(roomData));
+    router.push(`/room/${roomCode}`);
   };
 
   const handleDelete = async () => {

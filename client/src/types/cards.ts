@@ -29,3 +29,9 @@ export type CardDTO = {
 export type CardsListResponseDTO = {
   cards: CardDTO[];
 }
+
+export type RoomCardData = {
+  cardName: string;
+  magnetLink: string;
+  cardImageUrl?: string;
+}

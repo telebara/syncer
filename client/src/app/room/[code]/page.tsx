@@ -3,7 +3,8 @@
 import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { formatRoomCode } from "../../../utils/room";
-import { Avatar, Navbar, Chat } from "../../components";
+import { Avatar, Navbar, VideoPlayer, Chat, WebTorrentLoader } from "../../components";
+import { RoomCardData } from "../../../types/cards";
 import styles from "../page.module.css";
 
 // Моковые пользователи для списка справа
@@ -19,20 +20,42 @@ const RoomPage = ({ params }: { params: Promise<{ code: string }> }) => {
   const { code } = use(params) as { code: string };
   const router = useRouter();
   const roomCode = formatRoomCode(code);
+  const [roomData, setRoomData] = useState<RoomCardData | null>(null);
 
-  // WebSocket соединение (заглушка)
+  useEffect(() => {
+    const savedData = sessionStorage.getItem(`room-${code}`);
+    if (savedData) {
+      try {
+        const data: RoomCardData = JSON.parse(savedData);
+        setRoomData(data);
+        console.log('📦 Данные комнаты загружены:', data);
+      } catch (error) {
+        console.error('❌ Ошибка парсинга данных комнаты:', error);
+      }
+    } else {
+      console.log('⚠️ Данные комнаты не найдены, возвращаемся назад');
+      router.back();
+    }
+  }, [code]);
+
   useEffect(() => {
     // const ws = new WebSocket("wss://example.com/room/" + code);
     // return () => ws.close();
   }, [code]);
 
-  // Чат
-  const [messages, setMessages] = useState<{ user: string; text: string }[]>([]);
+  const [messages, setMessages] = useState<{ id: string; user: string; text: string; timestamp: Date; isOwn?: boolean }[]>([]);
   const [input, setInput] = useState("");
 
   const handleSend = () => {
     if (!input.trim()) return;
-    setMessages((msgs) => [...msgs, { user: "Вы", text: input }]);
+    const newMessage = {
+      id: Date.now().toString(),
+      user: "Вы",
+      text: input,
+      timestamp: new Date(),
+      isOwn: true
+    };
+    setMessages((msgs) => [...msgs, newMessage]);
     setInput("");
     // Здесь отправка через WebSocket
   };
@@ -43,17 +66,25 @@ const RoomPage = ({ params }: { params: Promise<{ code: string }> }) => {
         <button className={styles.backBtn} onClick={() => router.back()}>
           ← Назад
         </button>
-        <div className={styles.roomCode}>{roomCode}</div>
+        <div className={styles.roomInfo}>
+          <div className={styles.roomCode}>{roomCode}</div>
+          {roomData?.cardName && (
+            <div className={styles.cardName}>{roomData.cardName}</div>
+          )}
+        </div>
         <Avatar size={48} showUsername={false} />
       </Navbar>
       <div className={styles.roomMain}>
         {/* Левая часть: видео плеер */}
         <div style={{ flex: 1, background: "#181818", display: "flex", flexDirection: "column" }}>
-          <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <div style={{ width: "90%", height: 400, background: "#222", borderRadius: 16, display: "flex", alignItems: "center", justifyContent: "center", color: "#888", fontSize: 22 }}>
-              Видео плеер (заглушка)
-            </div>
-          </div>
+          {roomData && (
+            <WebTorrentLoader>
+              <VideoPlayer
+                magnetUrl={roomData.magnetLink}
+                cardName={roomData.cardName}
+              />
+            </WebTorrentLoader>
+          )}
         </div>
         {/* Правая часть: чат */}
         <Chat
