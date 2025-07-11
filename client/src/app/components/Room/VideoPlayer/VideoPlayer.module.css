@@ -166,3 +166,138 @@
   font-size: 14px;
   justify-content: center;
 }
+
+/* Новые стили для мета-информации */
+.metaInfoContainer {
+  width: 100%;
+  max-width: 800px;
+  background: #1a1a1a;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 16px;
+  border: 1px solid #333;
+}
+
+.metaTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #333;
+}
+
+.metaIcon {
+  font-size: 20px;
+}
+
+.metaGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.metaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.metaLabel {
+  font-size: 14px;
+  color: #a3a3a3;
+  font-weight: 500;
+}
+
+.metaValue {
+  font-size: 15px;
+  color: #fff;
+  min-height: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.hashValue {
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  color: #a78bfa;
+  word-break: break-all;
+  background: #2a2a2a;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.speedValue {
+  color: #10b981;
+  font-weight: 500;
+}
+
+.progressContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.progressBar {
+  flex: 1;
+  height: 6px;
+  background: #333;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #a78bfa 0%, #6366f1 100%);
+  transition: width 0.3s ease;
+}
+
+.progressText {
+  font-size: 13px;
+  color: #a78bfa;
+  font-weight: 500;
+  min-width: 40px;
+}
+
+/* Скелетон-анимация для загрузки */
+.skeleton {
+  height: 20px;
+  background: linear-gradient(90deg, #333 25%, #444 50%, #333 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 4px;
+  width: 100%;
+  max-width: 200px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+  .metaInfoContainer {
+    padding: 16px;
+  }
+
+  .metaTitle {
+    font-size: 16px;
+  }
+
+  .metaGrid {
+    gap: 12px;
+  }
+
+  .hashValue {
+    font-size: 12px;
+  }
+}
